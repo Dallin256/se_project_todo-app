@@ -4,6 +4,7 @@ import {
   todoTemplate,
 } from "../utils/constants.js";
 import Todo from "../components/todo.js"; //for some reason it doesn't like it when I capitilize it :/
+import FormValidator from "../components/FormValidator.js";
 import { v4 as uuidv4 } from "https://jspm.dev/uuid";
 
 const addTodoButton = document.querySelector(".button_action_add");
@@ -52,3 +53,6 @@ initialTodos.forEach((item) => {
   const todo = generateTodo(item);
   todosList.append(todo);
 });
+
+const validateTodoForm = new FormValidator(validationConfig, addTodoForm);
+validateTodoForm.enableValidation();
