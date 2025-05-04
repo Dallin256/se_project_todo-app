@@ -3,7 +3,7 @@ import {
   validationConfig,
   todoTemplate,
 } from "../utils/constants.js";
-import Todo from "../components/todo.js"; //for some reason it doesn't like it when I capitilize it :/
+import Todo from "../components/Todo.js";
 import FormValidator from "../components/FormValidator.js";
 import { v4 as uuidv4 } from "https://jspm.dev/uuid";
 
