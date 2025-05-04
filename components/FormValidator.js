@@ -13,11 +13,11 @@ class FormValidator {
     );
   }
 
-  _showInputError(inputElement) {
+  _showInputError(inputElement, errorMessage) {
     const errorElementId = `#${inputElement.id}-error`;
     const errorElement = this._formEl.querySelector(errorElementId);
     inputElement.classList.add(this._inputErrorClass);
-    errorElement.textContent = "errorMessage";
+    errorElement.textContent = errorMessage;
     errorElement.classList.add(this._settings.errorClass);
   }
 
@@ -31,7 +31,7 @@ class FormValidator {
 
   _checkInputValidity(inputElement) {
     if (!inputElement.validity.valid) {
-      this._showInputError(inputElement);
+      this._showInputError(inputElement, inputElement.validationMessage);
     } else {
       this._hideInputError(inputElement);
     }
