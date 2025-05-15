@@ -7,7 +7,6 @@ import Todo from "../components/Todo.js";
 import Section from "../components/Section.js";
 import FormValidator from "../components/FormValidator.js";
 import { v4 as uuidv4 } from "https://jspm.dev/uuid";
-
 import PopupWithForm from "../components/PopupWithForm.js";
 
 const addTodoButton = document.querySelector(".button_action_add");
@@ -23,6 +22,10 @@ const newPopupForm = new PopupWithForm({
 
 addTodoButton.addEventListener("click", () => {
   newPopupForm.open();
+});
+
+addTodoCloseBtn.addEventListener("click", () => {
+  newPopupForm.close();
 });
 
 const generateTodo = (data) => {

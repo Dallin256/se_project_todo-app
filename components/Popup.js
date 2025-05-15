@@ -1,14 +1,14 @@
 export default class Popup {
   constructor(popupSelector) {
-    this._popupSelector = document.querySelector(popupSelector);
+    this._popupEl = popupSelector;
   }
 
   open() {
-    this._popupSelector.classList.add("popup_visible");
+    this._popupEl.classList.add("popup_visible");
   }
 
-  close(element) {
-    element.classList.remove("popup_visible");
+  close() {
+    this._popupEl.classList.remove("popup_visible");
   }
 
   _handleEscapeClose() {}
