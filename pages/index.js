@@ -4,28 +4,25 @@ import {
   todoTemplate,
 } from "../utils/constants.js";
 import Todo from "../components/Todo.js";
+import Section from "../components/Section.js";
 import FormValidator from "../components/FormValidator.js";
 import { v4 as uuidv4 } from "https://jspm.dev/uuid";
+
+import PopupWithForm from "../components/PopupWithForm.js";
 
 const addTodoButton = document.querySelector(".button_action_add");
 const addTodoPopup = document.querySelector("#add-todo-popup");
 const addTodoForm = document.forms["add-todo-form"];
 const addTodoCloseBtn = addTodoPopup.querySelector(".popup__close");
 const todosList = document.querySelector(".todos__list");
-const openModal = (modal) => {
-  modal.classList.add("popup_visible");
-};
 
-const closeModal = (modal) => {
-  modal.classList.remove("popup_visible");
-};
-
-addTodoButton.addEventListener("click", () => {
-  openModal(addTodoPopup);
+const newPopupForm = new PopupWithForm({
+  popupSelector: addTodoPopup,
+  handleFormSubmit: () => {},
 });
 
-addTodoCloseBtn.addEventListener("click", () => {
-  closeModal(addTodoPopup);
+addTodoButton.addEventListener("click", () => {
+  newPopupForm.open();
 });
 
 const generateTodo = (data) => {
@@ -34,9 +31,18 @@ const generateTodo = (data) => {
   return todoElement;
 };
 
+const section = new Section({
+  items: initialTodos,
+  renderer: (item) => {
+    const element = generateTodo(item);
+    section.addItem(element);
+  },
+  containerSelector: todosList,
+});
+
 const renderTodo = (values) => {
   const todo = generateTodo(values);
-  todosList.append(todo);
+  section.addItem(todo);
 };
 
 addTodoForm.addEventListener("submit", (evt) => {
@@ -50,13 +56,11 @@ addTodoForm.addEventListener("submit", (evt) => {
   const id = uuidv4();
   const values = { name, date, id };
   renderTodo(values);
-  closeModal(addTodoPopup);
+  popup.close(addTodoPopup);
   validateTodoForm.resetValidation();
 });
 
-initialTodos.forEach((item) => {
-  renderTodo(item);
-});
+section.renderItems();
 
 const validateTodoForm = new FormValidator(validationConfig, addTodoForm);
 validateTodoForm.enableValidation();
