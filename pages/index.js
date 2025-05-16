@@ -6,26 +6,15 @@ import {
 import Todo from "../components/Todo.js";
 import Section from "../components/Section.js";
 import FormValidator from "../components/FormValidator.js";
-import { v4 as uuidv4 } from "https://jspm.dev/uuid";
 import PopupWithForm from "../components/PopupWithForm.js";
 
 const addTodoButton = document.querySelector(".button_action_add");
 const addTodoPopup = document.querySelector("#add-todo-popup");
 const addTodoForm = document.forms["add-todo-form"];
-const addTodoCloseBtn = addTodoPopup.querySelector(".popup__close");
 const todosList = document.querySelector(".todos__list");
 
-const newPopupForm = new PopupWithForm({
-  popupSelector: addTodoPopup,
-  handleFormSubmit: () => {},
-});
-
 addTodoButton.addEventListener("click", () => {
-  newPopupForm.open();
-});
-
-addTodoCloseBtn.addEventListener("click", () => {
-  newPopupForm.close();
+  popupForm.open();
 });
 
 const generateTodo = (data) => {
@@ -48,22 +37,18 @@ const renderTodo = (values) => {
   section.addItem(todo);
 };
 
-addTodoForm.addEventListener("submit", (evt) => {
-  evt.preventDefault();
-
-  const name = evt.target.name.value;
-  const dateInput = evt.target.date.value;
-  const date = new Date(dateInput);
-  date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
-
-  const id = uuidv4();
-  const values = { name, date, id };
-  renderTodo(values);
-  popup.close(addTodoPopup);
-  validateTodoForm.resetValidation();
-});
-
 section.renderItems();
 
 const validateTodoForm = new FormValidator(validationConfig, addTodoForm);
 validateTodoForm.enableValidation();
+
+const popupForm = new PopupWithForm({
+  popupSelector: addTodoPopup,
+  handleFormSubmit: (values) => {
+    renderTodo(values);
+    validateTodoForm.resetValidation();
+    popupForm.close();
+  },
+});
+
+popupForm.setEventListeners();
