@@ -1,5 +1,5 @@
-class Todo {
-  constructor(data, selector) {
+export default class Todo {
+  constructor(data, selector, handleCheckStatus, handleDeleteStatus) {
     this._data = data;
     this._templateElement = selector;
     this.todoElement = this._templateElement.content
@@ -12,6 +12,8 @@ class Todo {
       completeStatus: this.todoElement.querySelector(".todo__completed"),
       deleteButton: this.todoElement.querySelector(".todo__delete-btn"),
     };
+    this._handleCheckStatus = handleCheckStatus;
+    this._handleDeleteStatus = handleDeleteStatus;
   }
 
   _genCheckboxEl() {
@@ -40,20 +42,23 @@ class Todo {
 
     this._dateSetEl();
     this._genCheckboxEl();
-    this._setEventListeners();
+    this._setEventListeners(this.todoConfig.completeStatus);
 
     return this.todoElement;
+  }
+  _toggleCheck() {
+    this._data.completed = !this._data.completed;
   }
 
   _setEventListeners() {
     const todoDeleteBtn = this.todoConfig.deleteButton;
-    this._todoCheckboxEl.addEventListener("click", () => {
-      this._data.completed = !this._data.completed;
+    this._todoCheckboxEl.addEventListener("change", () => {
+      this._toggleCheck();
+      this._handleCheckStatus(this._data.completed);
     });
     todoDeleteBtn.addEventListener("click", () => {
       this.todoElement.remove();
+      this._handleDeleteStatus(this._data.completed);
     });
   }
 }
-
-export default Todo;
