@@ -1,31 +1,39 @@
 import Popup from "./Popup.js";
-import { v4 as uuidv4 } from "https://jspm.dev/uuid";
 
 export default class PopupWithForm extends Popup {
-  constructor({ popupSelector, handleFormSubmit, handleFormSubmitUpdate }) {
+  constructor({
+    popupSelector,
+    handleFormSubmit,
+    handleFormSubmitUpdate,
+    getId,
+  }) {
     super(popupSelector);
     this._handleFormSubmit = handleFormSubmit;
-    this._todoForms = this._popupEl.querySelector("form");
+    this._popupForm = this._popupEl.querySelector("form");
     this._handleFormSubmitUpdate = handleFormSubmitUpdate;
+    this._id = getId;
   }
 
   _getInputValues() {
-    const dateInput = this._todoForms.date.value;
-    const setDate = new Date(dateInput);
-    setDate.setMinutes(setDate.getMinutes() + setDate.getTimezoneOffset());
-    const values = {
-      name: this._todoForms.name.value,
-      date: setDate,
-      id: uuidv4(),
-    };
+    const inputList = this._popupForm.querySelectorAll(
+      "select, input, textarea"
+    );
+    const values = { id: this._id() };
 
+    inputList.forEach((input) => {
+      values[input.name] = input.value;
+    });
     return values;
   }
 
+  getForm() {
+    return this._popupForm;
+  }
+
   setEventListeners() {
-    this._popupEl.addEventListener("submit", () => {
+    this.getForm().addEventListener("submit", (event) => {
+      event.preventDefault();
       this._handleFormSubmit(this._getInputValues());
-      this._handleFormSubmitUpdate();
     });
     super.setEventListeners();
   }

@@ -23,11 +23,18 @@ export default class Popup {
       this.close();
     });
 
-    document.addEventListener("keydown", (evt) => {
-      this._handleEscapeClose(evt);
-    });
+    const handleEscListener = () => {
+      document.addEventListener("keydown", (evt) => {
+        this._handleEscapeClose(evt);
+      });
+      document.removeEventListener("keydown", (evt) => {
+        this._handleEscapeClose(evt);
+      });
+    };
 
-    document.addEventListener("click", (evt) => {
+    handleEscListener();
+
+    this._popupEl.addEventListener("click", (evt) => {
       if (evt.target === this._popupEl) {
         this.close();
       }

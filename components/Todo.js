@@ -42,7 +42,7 @@ export default class Todo {
 
     this._dateSetEl();
     this._genCheckboxEl();
-    this._setEventListeners(this.todoConfig.completeStatus);
+    this._setEventListeners();
 
     return this.todoElement;
   }
