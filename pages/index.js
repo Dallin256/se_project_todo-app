@@ -53,7 +53,7 @@ const section = new Section({
   renderer: (item) => {
     renderTodo(item);
   },
-  containerSelector: todosList,
+  containerHandler: todosList,
 });
 
 section.renderItems();
