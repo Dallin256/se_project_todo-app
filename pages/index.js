@@ -53,7 +53,7 @@ const section = new Section({
   renderer: (item) => {
     renderTodo(item);
   },
-  containerHandler: todosList,
+  containerEl: todosList,
 });
 
 section.renderItems();
@@ -61,20 +61,15 @@ section.renderItems();
 const validateTodoForm = new FormValidator(validationConfig, addTodoForm);
 validateTodoForm.enableValidation();
 
-function handleFormSubmitUpdate() {
-  todoCounter.updateTotal(false);
-}
-
 const todoPopup = new PopupWithForm({
   popupSelector: addTodoPopup,
   handleFormSubmit: (values) => {
+    values.id = uuidv4();
     renderTodo(values);
     validateTodoForm.resetValidation();
-    todoPopup._handleFormSubmitUpdate();
+    todoCounter.updateTotal(false);
     todoPopup.close();
   },
-  handleFormSubmitUpdate,
-  getId: () => uuidv4(),
 });
 
 todoPopup.setEventListeners();
